@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Нетворкинг-бинго · Альфа-Будущее</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --red: #EF3124;
+  --red-dark: #C8251A;
+  --lime: #C8FF00;
+  --lime-dark: #A8D900;
+  --black: #111111;
+  --white: #FFFFFF;
+  --gray-bg: #F5F5F5;
+  --gray-line: #E0E0E0;
+  --gray-text: #666666;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Nunito', sans-serif;
+  background: var(--white);
+  color: var(--black);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+.header {
+  background: var(--red);
+  padding: 0 32px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+
+.header-pill {
+  background: rgba(255,255,255,0.18);
+  color: var(--white);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  padding: 6px 16px;
+  border-radius: 100px;
+  border: 1.5px solid rgba(255,255,255,0.35);
+}
+
+/* HERO */
+.hero {
+  background: var(--red);
+  padding: 52px 32px 60px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.ticker-wrap {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  background: rgba(0,0,0,0.15);
+  overflow: hidden;
+  height: 36px;
+  display: flex;
+  align-items: center;
+}
+
+.ticker {
+  display: flex;
+  white-space: nowrap;
+  animation: ticker 20s linear infinite;
+}
+
+.ticker span {
+  font-size: 11px;
+  font-weight: 800;
+  color: rgba(255,255,255,0.65);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 0 28px;
+}
+
+.ticker span::after { content: '→'; margin-left: 10px; }
+
+@keyframes ticker {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+.hero-badge {
+  display: inline-block;
+  background: var(--lime);
+  color: var(--black);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  padding: 5px 16px;
+  border-radius: 100px;
+  margin-bottom: 24px;
+}
+
+.hero h1 {
+  font-size: clamp(44px, 9vw, 84px);
+  font-weight: 900;
+  color: var(--white);
+  line-height: 0.92;
+  letter-spacing: -0.025em;
+  text-transform: uppercase;
+  margin-bottom: 18px;
+}
+
+.hero h1 em {
+  font-style: normal;
+  color: var(--lime);
+}
+
+.hero-sub {
+  font-size: 15px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.72);
+  line-height: 1.65;
+  max-width: 400px;
+  margin: 0 auto 40px;
+}
+
+.rules {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.rule-card {
+  background: rgba(255,255,255,0.13);
+  border: 1.5px solid rgba(255,255,255,0.22);
+  border-radius: 16px;
+  padding: 14px 16px;
+  text-align: left;
+  width: 148px;
+}
+
+.rule-num {
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--lime);
+  letter-spacing: 0.08em;
+  margin-bottom: 7px;
+}
+
+.rule-text {
+  font-size: 12px;
+  font-weight: 700;
+  color: rgba(255,255,255,0.85);
+  line-height: 1.4;
+}
+
+/* BINGO SECTION */
+.bingo-section {
+  padding: 36px 20px 72px;
+  max-width: 680px;
+  margin: 0 auto;
+}
+
+.win-banner {
+  background: var(--lime);
+  border-radius: 20px;
+  padding: 20px 24px;
+  text-align: center;
+  margin-bottom: 20px;
+  display: none;
+}
+
+.win-banner.show {
+  display: block;
+  animation: pop 0.35s cubic-bezier(0.34,1.56,0.64,1);
+}
+
+@keyframes pop {
+  from { opacity: 0; transform: scale(0.88); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.win-title {
+  font-size: 20px;
+  font-weight: 900;
+  color: var(--black);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  margin-bottom: 4px;
+}
+
+.win-sub { font-size: 13px; font-weight: 700; color: #333; }
+
+.score-bar {
+  display: flex;
+  background: var(--gray-bg);
+  border-radius: 16px;
+  overflow: hidden;
+  margin-bottom: 10px;
+}
+
+.score-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 14px 8px;
+  border-right: 1px solid var(--gray-line);
+}
+
+.score-item:last-child { border-right: none; }
+
+.score-label {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--gray-text);
+}
+
+.score-value {
+  font-size: 26px;
+  font-weight: 900;
+  color: var(--black);
+}
+
+.card-num {
+  text-align: right;
+  font-size: 10px;
+  font-weight: 700;
+  color: #ccc;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+/* GRID */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 6px;
+  margin-bottom: 16px;
+}
+
+.cell {
+  background: var(--gray-bg);
+  border: 2px solid transparent;
+  border-radius: 14px;
+  padding: 8px 5px;
+  min-height: 96px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.14s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.cell:hover:not(.free) {
+  border-color: var(--red);
+  background: #fff2f1;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(239,49,36,0.15);
+}
+
+.cell:active:not(.free) { transform: scale(0.94); box-shadow: none; }
+
+.cell.filled { background: #fff0ef; border-color: var(--red); }
+
+.cell.line-win {
+  background: var(--lime);
+  border-color: var(--lime-dark);
+  transform: none;
+}
+
+.cell.free {
+  background: var(--red);
+  border-color: var(--red);
+  cursor: default;
+}
+
+.cell-emoji { font-size: 20px; margin-bottom: 5px; line-height: 1; }
+.cell.free .cell-emoji { font-size: 24px; }
+
+.cell-text {
+  font-size: 9.5px;
+  font-weight: 700;
+  line-height: 1.3;
+  color: #444;
+}
+
+.cell.free .cell-text {
+  color: rgba(255,255,255,0.92);
+  font-weight: 800;
+  font-size: 9px;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+.cell.line-win .cell-text { color: var(--black); }
+
+.cell-name {
+  margin-top: 5px;
+  font-size: 9px;
+  font-weight: 800;
+  color: var(--red);
+  background: rgba(239,49,36,0.1);
+  border: 1.5px solid rgba(239,49,36,0.25);
+  border-radius: 6px;
+  padding: 2px 6px;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.cell.line-win .cell-name {
+  color: var(--black);
+  background: rgba(0,0,0,0.1);
+  border-color: rgba(0,0,0,0.18);
+}
+
+.check-dot {
+  position: absolute;
+  top: 5px; right: 5px;
+  width: 14px; height: 14px;
+  background: var(--red);
+  border-radius: 50%;
+  display: none;
+  align-items: center;
+  justify-content: center;
+}
+
+.cell.filled .check-dot { display: flex; }
+.cell.line-win .check-dot { background: var(--black); }
+
+.check-dot::after {
+  content: '';
+  width: 4px; height: 6px;
+  border-right: 1.5px solid #fff;
+  border-bottom: 1.5px solid #fff;
+  transform: rotate(45deg) translate(-0.5px, -1px);
+}
+
+.reset-row { display: flex; justify-content: center; margin-top: 4px; }
+
+.reset-btn {
+  font-family: 'Nunito', sans-serif;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--gray-text);
+  background: none;
+  border: 2px solid var(--gray-line);
+  border-radius: 10px;
+  padding: 8px 20px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.reset-btn:hover { border-color: var(--red); color: var(--red); }
+
+/* MODAL */
+.modal-overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  z-index: 200;
+  padding: 0 12px 12px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s;
+}
+
+.modal-overlay.open { opacity: 1; pointer-events: all; }
+
+.modal {
+  background: var(--white);
+  border-radius: 24px 24px 18px 18px;
+  padding: 8px 24px 28px;
+  width: 100%;
+  max-width: 460px;
+  transform: translateY(32px);
+  transition: transform 0.25s cubic-bezier(0.34,1.3,0.64,1);
+}
+
+.modal-overlay.open .modal { transform: translateY(0); }
+
+.modal-handle {
+  width: 40px; height: 4px;
+  background: var(--gray-line);
+  border-radius: 2px;
+  margin: 12px auto 20px;
+}
+
+.modal-emoji { font-size: 30px; display: block; margin-bottom: 8px; }
+
+.modal-question {
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--black);
+  margin-bottom: 4px;
+  line-height: 1.35;
+}
+
+.modal-hint {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--gray-text);
+  margin-bottom: 16px;
+}
+
+.modal input {
+  width: 100%;
+  height: 50px;
+  font-family: 'Nunito', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  border: 2px solid var(--gray-line);
+  border-radius: 14px;
+  padding: 0 16px;
+  color: var(--black);
+  background: var(--gray-bg);
+  outline: none;
+  transition: border-color 0.15s;
+  margin-bottom: 12px;
+  caret-color: var(--red);
+}
+
+.modal input::placeholder { color: #bbb; font-weight: 600; }
+.modal input:focus { border-color: var(--red); background: #fff; }
+
+.modal-btns { display: flex; gap: 10px; }
+
+.modal-btns button {
+  flex: 1;
+  height: 50px;
+  border-radius: 14px;
+  border: none;
+  font-family: 'Nunito', sans-serif;
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.btn-cancel { background: var(--gray-bg); color: var(--gray-text); }
+.btn-cancel:hover { background: var(--gray-line); }
+
+.btn-save { background: var(--lime); color: var(--black); }
+.btn-save:hover { background: var(--lime-dark); }
+.btn-save:active { transform: scale(0.97); }
+
+.btn-clear {
+  display: none;
+  width: 100%;
+  height: 40px;
+  margin-top: 8px;
+  background: none;
+  border: 2px solid var(--gray-line);
+  border-radius: 12px;
+  font-family: 'Nunito', sans-serif;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: #bbb;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.btn-clear.show { display: block; }
+.btn-clear:hover { border-color: var(--red); color: var(--red); }
+
+
+
+@media (max-width: 460px) {
+  .header { padding: 0 16px; }
+  .header-pill { display: none; }
+  .hero { padding: 36px 16px 54px; }
+  .bingo-section { padding: 24px 10px 52px; }
+  .cell { min-height: 78px; border-radius: 10px; }
+  .cell-emoji { font-size: 16px; }
+  .cell-text { font-size: 8.5px; }
+  .rule-card { width: 130px; }
+}
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="header-pill">Велком-день</div>
+  <div class="header-pill">Нетворкинг-игра</div>
+</header>
+
+<section class="hero">
+  <div class="hero-badge">Нетворкинг-игра</div>
+  <h1>Найди<br><em>своих!</em></h1>
+  <p class="hero-sub">Знакомься с командой через игру — найди людей, которым подходит описание, впиши имя и собери линию!</p>
+
+  <div class="rules">
+    <div class="rule-card">
+      <div class="rule-num">01 ↓</div>
+      <div class="rule-text">Нажми на клетку</div>
+    </div>
+    <div class="rule-card">
+      <div class="rule-num">02 ↓</div>
+      <div class="rule-text">Найди человека и впиши имя</div>
+    </div>
+    <div class="rule-card">
+      <div class="rule-num">03 ↓</div>
+      <div class="rule-text">Ряд, столбец или диагональ — победа</div>
+    </div>
+    <div class="rule-card">
+      <div class="rule-num">🏆</div>
+      <div class="rule-text">Первые 3–5 получают мерч!</div>
+    </div>
+  </div>
+
+  <div class="ticker-wrap">
+    <div class="ticker">
+      <span>Знакомься</span><span>Общайся</span><span>Находи своих</span><span>Выигрывай мерч</span><span>Альфа-Будущее</span>
+      <span>Знакомься</span><span>Общайся</span><span>Находи своих</span><span>Выигрывай мерч</span><span>Альфа-Будущее</span>
+      <span>Знакомься</span><span>Общайся</span><span>Находи своих</span><span>Выигрывай мерч</span><span>Альфа-Будущее</span>
+    </div>
+  </div>
+</section>
+
+<section class="bingo-section">
+  <div class="win-banner" id="winBanner">
+    <div class="win-title">🏆 Линия собрана!</div>
+    <div class="win-sub" id="winSub">Беги к организаторам — ты в числе первых!</div>
+  </div>
+
+  <div class="score-bar">
+    <div class="score-item">
+      <span class="score-label">Заполнено</span>
+      <span class="score-value" id="filledCount">0</span>
+    </div>
+    <div class="score-item">
+      <span class="score-label">Осталось</span>
+      <span class="score-value" id="leftCount">24</span>
+    </div>
+    <div class="score-item">
+      <span class="score-label">Линий</span>
+      <span class="score-value" id="linesCount">0</span>
+    </div>
+  </div>
+
+  <div class="card-num" id="cardNum"></div>
+  <div class="grid" id="grid"></div>
+
+  <div class="reset-row">
+    <button class="reset-btn" onclick="resetCard()">Начать заново</button>
+  </div>
+</section>
+
+
+
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <span class="modal-emoji" id="mEmoji"></span>
+    <div class="modal-question" id="mQuestion"></div>
+    <div class="modal-hint">Найди такого человека и впиши его имя:</div>
+    <input type="text" id="mInput" placeholder="Имя..." maxlength="40" autocomplete="off"/>
+    <div class="modal-btns">
+      <button class="btn-cancel" id="cancelBtn">Отмена</button>
+      <button class="btn-save" id="saveBtn">Записать ✓</button>
+    </div>
+    <button class="btn-clear" id="clearBtn">Очистить клетку</button>
+  </div>
+</div>
+
+<script>
+const ALL=[
+  {e:"✈️",t:"Уже проходил стажировку в другой компании"},
+  {e:"🌍",t:"Знает 3 и более языка (включая родной)"},
+  {e:"🎓",t:"Учится не на экономике и не на IT"},
+  {e:"🚀",t:"Участвовал в мероприятиях Альфа-Будущего"},
+  {e:"☕",t:"Пришёл на встречу с кофе или чаем"},
+  {e:"🌆",t:"Приехал из другого города"},
+  {e:"🎸",t:"Играет на музыкальном инструменте"},
+  {e:"📱",t:"Нашёл стажировку через соцсети, а не hh.ru"},
+  {e:"🤝",t:"Уже знаком с кем-то из команды"},
+  {e:"🏆",t:"Победитель хакатона или кейс-чемпионата"},
+  {e:"🌙",t:"Сова — лучше работает по ночам"},
+  {e:"📚",t:"Читает бизнес-книги и может назвать последнюю"},
+  {e:"🎯",t:"Уже знает, в каком отделе хочет остаться"},
+  {e:"💡",t:"Придумал идею для продукта Альфа"},
+  {e:"🐾",t:"Есть домашнее животное"},
+  {e:"🏃",t:"Занимается спортом 3+ раза в неделю"},
+  {e:"🎬",t:"Вёл блог или YouTube-канал"},
+  {e:"💼",t:"Пробовал запустить своё дело или проект"},
+  {e:"🌱",t:"На стажировке впервые в жизни"},
+  {e:"🧩",t:"Умеет решать кубик Рубика"},
+  {e:"🗓️",t:"Совмещает стажировку с учёбой"},
+  {e:"🎤",t:"Выступал публично: конференция, TEDx, КВН"},
+  {e:"🌟",t:"Есть знакомые, работающие в Альфа-Банке"},
+  {e:"🤖",t:"Активно использует ИИ-инструменты"},
+  {e:"🧳",t:"Был за рубежом в последний год"},
+  {e:"📊",t:"Знает Excel на уровне формул и сводных"},
+  {e:"🎨",t:"Занимается творчеством в свободное время"},
+  {e:"🏦",t:"Уже пользуется продуктами Альфа-Банка"},
+  {e:"🌐",t:"Мечтает работать в международной команде"},
+  {e:"🎮",t:"Играет в видеоигры регулярно"},
+  {e:"🧠",t:"Участвовал в олимпиадах или конференциях"},
+  {e:"📸",t:"Фотографирует как хобби"},
+];
+
+const SK='ab_seed5',TK='ab_state5';
+function rng(s){return()=>{s=(s*1664525+1013904223)&0xffffffff;return(s>>>0)/0xffffffff}}
+function shuffle(a,s){const r=rng(s),b=[...a];for(let i=b.length-1;i>0;i--){const j=Math.floor(r()*(i+1));[b[i],b[j]]=[b[j],b[i]]}return b}
+function getSeed(){let s=localStorage.getItem(SK);if(!s){s=String(Math.floor(Math.random()*1e9)+Date.now());localStorage.setItem(SK,s)}return parseInt(s)}
+function buildGrid(seed){const p=shuffle(ALL,seed).slice(0,24);return Array.from({length:25},(_,i)=>i===12?{e:'⭐',t:'FREE',free:true,filled:true,name:''}:{...p[i<12?i:i-1],filled:false,name:''})}
+function getWins(g){const w=[];for(let r=0;r<5;r++)if([0,1,2,3,4].every(c=>g[r*5+c].filled))w.push([0,1,2,3,4].map(c=>r*5+c));for(let c=0;c<5;c++)if([0,1,2,3,4].every(r=>g[r*5+c].filled))w.push([0,1,2,3,4].map(r=>r*5+c));if([0,1,2,3,4].every(i=>g[i*5+i].filled))w.push([0,6,12,18,24]);if([0,1,2,3,4].every(i=>g[i*5+(4-i)].filled))w.push([4,8,12,16,20]);return w}
+
+let grid=[],seed=0,idx=null;
+function save(){localStorage.setItem(TK,JSON.stringify(grid.map(c=>({f:c.filled,n:c.name}))))}
+
+function render(){
+  const el=document.getElementById('grid');
+  const ws=new Set(getWins(grid).flat());
+  el.innerHTML='';
+  grid.forEach((c,i)=>{
+    const d=document.createElement('div');
+    d.className='cell'+(c.free?' free':ws.has(i)?' line-win':c.filled?' filled':'');
+    d.innerHTML=`<div class="cell-emoji">${c.e}</div><div class="cell-text">${c.t}</div>`+(!c.free?`<div class="check-dot"></div>`:'')+( c.filled&&!c.free&&c.name?`<div class="cell-name">${c.name}</div>`:'');
+    if(!c.free)d.onclick=()=>openM(i);
+    el.appendChild(d);
+  });
+  const f=grid.filter(c=>!c.free&&c.filled).length;
+  document.getElementById('filledCount').textContent=f;
+  document.getElementById('leftCount').textContent=24-f;
+  const wl=getWins(grid).length;
+  document.getElementById('linesCount').textContent=wl;
+  const b=document.getElementById('winBanner');
+  if(wl>0){b.classList.add('show');document.getElementById('winSub').textContent=wl===1?'Беги к организаторам — ты в числе первых! 🏅':`У тебя уже ${wl} линии — точно в топе! 🎉`}
+  else b.classList.remove('show');
+}
+
+function openM(i){
+  idx=i;const c=grid[i];
+  document.getElementById('mEmoji').textContent=c.e;
+  document.getElementById('mQuestion').textContent=c.t;
+  document.getElementById('mInput').value=c.name||'';
+  document.getElementById('clearBtn').className='btn-clear'+(c.filled?' show':'');
+  document.getElementById('modalOverlay').classList.add('open');
+  setTimeout(()=>document.getElementById('mInput').focus(),120);
+}
+
+function closeM(){document.getElementById('modalOverlay').classList.remove('open');idx=null}
+function saveCell(){const v=document.getElementById('mInput').value.trim();if(idx!==null){grid[idx].filled=v.length>0;grid[idx].name=v;save();render()}closeM()}
+function clearCell(){if(idx!==null){grid[idx].filled=false;grid[idx].name='';save();render()}closeM()}
+function resetCard(){if(!confirm('Сбросить все заполненные клетки?'))return;grid.forEach(c=>{if(!c.free){c.filled=false;c.name=''}});save();render()}
+
+document.getElementById('cancelBtn').onclick=closeM;
+document.getElementById('saveBtn').onclick=saveCell;
+document.getElementById('clearBtn').onclick=clearCell;
+document.getElementById('mInput').addEventListener('keydown',e=>{if(e.key==='Enter')saveCell();if(e.key==='Escape')closeM()});
+document.getElementById('modalOverlay').onclick=e=>{if(e.target===document.getElementById('modalOverlay'))closeM()};
+
+seed=getSeed();grid=buildGrid(seed);
+try{const s=localStorage.getItem(TK);if(s){const d=JSON.parse(s);if(d.length===25)grid.forEach((c,i)=>{if(!c.free){c.filled=d[i].f;c.name=d[i].n}})}}catch(e){}
+document.getElementById('cardNum').textContent='Карточка #'+(seed%100000).toString().padStart(5,'0');
+render();
+</script>
+</body>
+</html>
